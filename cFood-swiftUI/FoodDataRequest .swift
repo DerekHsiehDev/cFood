@@ -38,6 +38,12 @@ class NutritionViewModel: ObservableObject {
 
     @Published var calories = Float()
     @Published var nutritionArr = [String]()
+    @Published var carbs = Float()
+    @Published var fat = Float()
+    @Published var protein = Float()
+    @Published var servingSize = String()
+    
+    
     var fdcId: Int = 0
     
     
