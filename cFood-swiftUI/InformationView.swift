@@ -277,7 +277,9 @@ struct DetailsView: View {
                                     .font(.system(size: 15, design: .rounded))
                                     .foregroundColor(.red)
                                 Text("\(Int(nutritionVM.calories))")
-                                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.2)
                             }.padding()
                         }
                         .padding(10)
@@ -297,7 +299,9 @@ struct DetailsView: View {
                                     .font(.system(size: 15, design: .rounded))
                                     .foregroundColor(.green)
                                 Text("\(Int(nutritionVM.carbs))")
-                                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.2)
                             }.padding()
                         }
                         .padding(10)
@@ -321,7 +325,9 @@ struct DetailsView: View {
                                     .font(.system(size: 15, design: .rounded))
                                     .foregroundColor(.blue)
                                 Text("\(Int(nutritionVM.fat))")
-                                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                                
+                                    
                             }.padding()
                         }.padding(.trailing, 25)
                         .padding(10)
@@ -345,7 +351,7 @@ struct DetailsView: View {
                                     .font(.system(size: 15, design: .rounded))
                                     .foregroundColor(.orange)
                                 Text("\(Int(nutritionVM.protein))")
-                                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                                    .font(.system(size: 40, weight: .bold, design: .rounded))
                             }.padding()
                         }
                         .padding(10)
@@ -462,11 +468,12 @@ struct DetailsView: View {
                                 Text(show ? "\(MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())" : "\(Int(nutritionVM.calories))")
                                     .font(.system(size: show ? 55 : 60, weight: .bold))
                                     .frame(maxWidth: .infinity, alignment: .center)
-                                    .minimumScaleFactor(0.2)
+                                    
                                     .padding(show ? 5 : 0)
                                     .foregroundColor(show ? .white : .black)
                                     //                                    .padding(.top, show ? 15 : 0)
                                     .lineLimit(1)
+                                    .minimumScaleFactor(0.2)
                                     .modifier(Shake(animatableData: CGFloat(attempts)))
                                     .animation(.spring())
                                     
