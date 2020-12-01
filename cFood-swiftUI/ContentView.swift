@@ -57,6 +57,7 @@ struct ContentView: View {
     @State var show = false
     @State var selectedTab = "home"
     @State var tabBarHidden = false
+    
 
     
     let fatSearchRequest = FatSecretAPI()

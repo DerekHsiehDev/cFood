@@ -22,10 +22,12 @@ func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
 }
 
 struct InformationView: View {
+    
     @Binding var show: Bool
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @State var showDetailsView = false
     @Binding var tabViewHidden: Bool
+    
     
     
     var body: some View {
@@ -95,7 +97,19 @@ struct ToolBarView: View {
                 
                 Spacer()
                 
-                Button(action: {}) {
+                Button(action: {
+                    
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                        return
+                    }
+                    
+                    let managedContext = appDelegate.persistentContainer.viewContext
+                    
+                    let entity = NSEntityDescription.entity(forEntityName: "Food", in: managedContext)!
+                    
+//                   let newFood =
+                    
+                }) {
                     Image(systemName: "folder.badge.plus")
                         .resizable()
                         .foregroundColor(Color(.black).opacity(0.9))
