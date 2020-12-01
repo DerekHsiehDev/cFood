@@ -6,6 +6,11 @@
 //
 
 import SwiftUI
+import CoreData
+
+
+
+let screen = UIScreen.main.bounds
 
 
 func haptic(type: UINotificationFeedbackGenerator.FeedbackType) {
@@ -20,6 +25,7 @@ struct InformationView: View {
     @Binding var show: Bool
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @State var showDetailsView = false
+    @Binding var tabViewHidden: Bool
     
     
     var body: some View {
@@ -29,7 +35,7 @@ struct InformationView: View {
             
             if showDetailsView == false {
                 
-                ToolBarView(show: $show)
+                ToolBarView(tabViewHidden: $tabViewHidden, show: $show)
                 
                 Text("\(MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())")
                     .font(.system(size: 45, weight: .heavy))
@@ -57,6 +63,7 @@ struct InformationView: View {
 //}
 
 struct ToolBarView: View {
+    @Binding var tabViewHidden: Bool
     @Binding var show: Bool
     @EnvironmentObject var nutritionVM: NutritionViewModel
     
@@ -71,6 +78,8 @@ struct ToolBarView: View {
             HStack {
                 Button(action: {
                     haptic(type: .error)
+                    
+                    tabViewHidden = false
                     
                     show = false
                     nutritionVM.calories = 0
@@ -403,14 +412,7 @@ struct DetailsView: View {
                                         
                                         DragGesture().onChanged { gesture in
                                             
-                                            if self.show == false {    self.activeView = gesture.translation}
-                                            
-                                            //                                            guard gesture.translation.height < 300 else { return }
-                                            //                                            guard gesture.translation.height > 0 else { return }
-                                            
-                                            
-                                            
-                                            
+                                            if self.show == false { self.activeView = gesture.translation}
                                             
                                         }
                                         .onEnded { value in
@@ -461,7 +463,7 @@ struct DetailsView: View {
                 }
                 
             }
-            .frame(height: show ? screen.height : 200)
+            .frame(height: show ? UIScreen.main.bounds.height : 200)
             .scaleEffect(1 - self.activeView.height/1000)
             .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
             .edgesIgnoringSafeArea(.all)

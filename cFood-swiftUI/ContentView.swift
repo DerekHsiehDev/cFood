@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import Introspect
 
 let nutritionVM = NutritionViewModel()
+
+
 
 struct FatSecret {
     
@@ -43,9 +46,18 @@ struct FatSecret {
 }
 
 struct ContentView: View {
+    
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.green
+        UITabBar.appearance().tintColor = UIColor.white
+        }
+    
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @State var liveViewRunning = true
     @State var show = false
+    @State var selectedTab = "home"
+    @State var tabBarHidden = false
+
     
     let fatSearchRequest = FatSecretAPI()
     
@@ -53,108 +65,167 @@ struct ContentView: View {
         
         
         
-        ZStack {
-            CameraView(liveViewRunning: $liveViewRunning, show: $show)
-                .edgesIgnoringSafeArea(.all)
+        TabView {
             
             
             
-            
-            
-            InformationView(show: $show)
-            
-            
-        }
-        .overlay(
-        
-            VStack(spacing: 0) {
-                Color(.black).opacity(0.2)
+            ZStack {
+                CameraView(liveViewRunning: $liveViewRunning, show: $show)
+                    .edgesIgnoringSafeArea(.all)
                 
-                HStack(spacing: 0) {
-                    Color(.black).opacity(0.2).frame(height: 400)
-                    
-                    Image("cross box").resizable().cornerRadius(25).frame(width: 400, height: 400)
-                    
-                    
-                    Color(.black).opacity(0.2).frame(height: 400)
-                }
-                Color(.black).opacity(0.2)
-            }.edgesIgnoringSafeArea(.all)
-            .opacity(show ? 0 : 1)
-            .onTapGesture {
-                if show == false {
-                    liveViewRunning = false
-                    
-                    show = true
-                    let randomAcc = Int.random(in: 0..<3)
-                    
-                    fatSearchRequest.key = FatSecret().returnKey(acc: randomAcc)
-                    fatSearchRequest.secret = FatSecret().returnSecret(acc: randomAcc)
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        
-                        fatSearchRequest.searchFoodBy(name: MLData.foodName.replacingOccurrences(of: "_", with: " ")) { (search) in
-                            print(MLData.foodName)
-                            var str = search.foods.first!.description!
-                            print(str)
-                            
-                            var servingSize = ""
-                            
-                            if let endIndex = str.range(of: "-")?.lowerBound {
-                                servingSize = (String(str[..<endIndex]))
-                            }
-                            
-//                            print(servingSize)
-                            
-
-                            
-                            if let range = str.range(of: "-") {
-                                str = String(str[range.upperBound...])
-                                
-                            }
-                            
-                            let nutritionArray = str.components(separatedBy: "|")
-                            print(nutritionArray)
-                            
-                            let calories = nutritionArray.first
-                            let fat = nutritionArray[1]
-                            let carbs = nutritionArray[2]
-                            let protein = nutritionArray[3]
-                            
-                            // get serving size
-                           
-                            
-                            DispatchQueue.main.async {
-                                nutritionVM.calories = filterOutNums(str: calories!)
-                                nutritionVM.fat = (filterOutNums(str: fat))
-                                nutritionVM.carbs = (filterOutNums(str: carbs))
-                                nutritionVM.protein = (filterOutNums(str: protein))
-                                nutritionVM.servingSize = servingSize
-                            }
-                            
-                            
-                        }
-                    }
+                
+                
+                
+                
+                VStack {
+                    InformationView(show: $show, tabViewHidden: $tabBarHidden)
                     
                 }
-                
                 
                 
             }
-            .animation(Animation
-                        .easeInOut
-                        .delay(show ? 0 : 0.5)
+            .tabItem {
+                VStack {
+                    Text("")
+                    Image(systemName: "house.fill")
+                        .padding(30)
+                }
+                
+            }.tag(0)
+            .overlay(
+                
+                
+                VStack(spacing: 0) {
+                    Color(.black).opacity(0.2)
+                    
+                    HStack(spacing: 0) {
+                        Color(.black).opacity(0.2).frame(height: 400)
+                        
+                        Image("cross box").resizable().cornerRadius(25).frame(width: 400, height: 400)
+                        
+                        
+                        Color(.black).opacity(0.2).frame(height: 400)
+                    }
+                    Color(.black).opacity(0.2)
+                }.edgesIgnoringSafeArea(.all)
+                .opacity(show ? 0 : 1)
+                .onTapGesture {
+                    if show == false {
+                        liveViewRunning = false
+                        
+                        tabBarHidden = true
+                        
+                        show = true
+                        let randomAcc = Int.random(in: 0..<3)
+                        
+                        fatSearchRequest.key = FatSecret().returnKey(acc: randomAcc)
+                        fatSearchRequest.secret = FatSecret().returnSecret(acc: randomAcc)
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            
+                            fatSearchRequest.searchFoodBy(name: MLData.foodName.replacingOccurrences(of: "_", with: " ")) { (search) in
+                                print(MLData.foodName)
+                                var str = search.foods.first!.description!
+                                print(str)
+                                
+                                var servingSize = ""
+                                
+                                if let endIndex = str.range(of: "-")?.lowerBound {
+                                    servingSize = (String(str[..<endIndex]))
+                                }
+                                
+                                //                            print(servingSize)
+                                
+                                
+                                
+                                if let range = str.range(of: "-") {
+                                    str = String(str[range.upperBound...])
+                                    
+                                }
+                                
+                                let nutritionArray = str.components(separatedBy: "|")
+                                print(nutritionArray)
+                                
+                                let calories = nutritionArray.first
+                                let fat = nutritionArray[1]
+                                let carbs = nutritionArray[2]
+                                let protein = nutritionArray[3]
+                                
+                                // get serving size
+                                
+                                
+                                DispatchQueue.main.async {
+                                    nutritionVM.calories = filterOutNums(str: calories!)
+                                    nutritionVM.fat = (filterOutNums(str: fat))
+                                    nutritionVM.carbs = (filterOutNums(str: carbs))
+                                    nutritionVM.protein = (filterOutNums(str: protein))
+                                    nutritionVM.servingSize = servingSize
+                                }
+                                
+                                
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
+                }
+                .animation(Animation
+                            .easeInOut
+                            .delay(show ? 0 : 0.5)
+                )
+               
+                
+              
+                
+                
+                
+                
+                
             )
             
-        )
-        
-        
-        
-        
-        
-        
+            LogView().tabItem {
+                Image(systemName: "tray.fill")
+                .padding(30)
+            }.tag(0)
+            
+            
+            
+        }
+        .accentColor(.orange)
+        .introspectTabBarController { (UITabBarController) in
+            UITabBarController.tabBar.isHidden = tabBarHidden
+           
+        }
+    }
+    
+    
+    
+}
+
+
+var tabs = ["house.fill" , "tray.fill"]
+
+
+struct TabButton: View {
+    var image: String
+    @Binding var selectedTab: String
+    
+    var body: some View {
+        Button(action: {
+            selectedTab = image
+            
+        }) {
+            Image(systemName: image)
+                .font(.system(size: 30, weight: .bold))
+                
+                .foregroundColor(selectedTab == image ? Color(.white) : Color.black.opacity(0.4))
+                .padding()
+        }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -165,4 +236,5 @@ struct ContentView_Previews: PreviewProvider {
 func filterOutNums(str: String) -> Float {
     return Float(str.filter("0123456789.".contains))!
 }
+
 
