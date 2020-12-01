@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="FoodNutritionInfo" representedClassName="FoodNutritionInfo" syncable="YES" codeGenerationType="class">
+    <entity name="FoodItem" representedClassName=".FoodItem" syncable="YES">
         <attribute name="calories" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="carbs" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -10,6 +10,6 @@
         <attribute name="servingSize" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="FoodNutritionInfo" positionX="-54" positionY="-9" width="128" height="134"/>
+        <element name="FoodItem" positionX="-54" positionY="-9" width="128" height="134"/>
     </elements>
 </model>

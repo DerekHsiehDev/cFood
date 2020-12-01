@@ -28,6 +28,8 @@ struct InformationView: View {
     @State var showDetailsView = false
     @Binding var tabViewHidden: Bool
     
+   
+    
     
     
     var body: some View {
@@ -50,7 +52,7 @@ struct InformationView: View {
             
             Spacer()
             
-            CalorieView(show: $showDetailsView)
+            CalorieView(show: $showDetailsView, tabViewHidden: $tabViewHidden, showInformationView: $show)
         }
         .edgesIgnoringSafeArea(.all)
         .opacity(show ? 1 : 0)
@@ -65,9 +67,30 @@ struct InformationView: View {
 //}
 
 struct ToolBarView: View {
+    
+    @Environment(\.managedObjectContext) var managedObjectContext
+   
     @Binding var tabViewHidden: Bool
     @Binding var show: Bool
     @EnvironmentObject var nutritionVM: NutritionViewModel
+    
+    fileprivate func saveFoodItem() {
+        let newFoodItem = FoodItem(context: self.managedObjectContext)
+        
+        newFoodItem.name = MLData.foodName.capitalizingFirstLetter().replacingOccurrences(of: "_", with: " ")
+        newFoodItem.calories = NSNumber(value: Int(nutritionVM.calories))
+        newFoodItem.carbs = NSNumber(value: Int(nutritionVM.carbs))
+        newFoodItem.fats =  NSNumber(value: Int(nutritionVM.fat))
+        newFoodItem.proteins =  NSNumber(value: Int(nutritionVM.protein))
+        newFoodItem.servingSize = nutritionVM.servingSize
+        newFoodItem.date = Date()
+        
+        do {
+            try self.managedObjectContext.save()
+        } catch {
+            print(error)
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -99,15 +122,14 @@ struct ToolBarView: View {
                 
                 Button(action: {
                     
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                        return
-                    }
+                    saveFoodItem()
                     
-                    let managedContext = appDelegate.persistentContainer.viewContext
+                    haptic(type: .success)
                     
-                    let entity = NSEntityDescription.entity(forEntityName: "Food", in: managedContext)!
+                    tabViewHidden = false
                     
-//                   let newFood =
+                    show = false
+                    nutritionVM.calories = 0
                     
                 }) {
                     Image(systemName: "folder.badge.plus")
@@ -121,18 +143,15 @@ struct ToolBarView: View {
         }
     }
 }
-struct CalorieView_Preview: PreviewProvider {
-    static var previews: some View {
-        CalorieView( show: .constant(false)).environmentObject(nutritionVM)
-    }
-}
+
 
 struct CalorieView: View {
     
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @State var attempts: Int = 0
     @Binding var show: Bool
-    
+    @Binding var tabViewHidden: Bool
+    @Binding var showInformationView: Bool
     
     var body: some View {
         
@@ -196,7 +215,7 @@ struct CalorieView: View {
             
             
             
-            DetailsView(show: $show, attempts: $attempts)
+            DetailsView(show: $show, showInformationView: $showInformationView, attempts: $attempts, tabViewHidden: $tabViewHidden)
             
             
         }
@@ -232,12 +251,14 @@ struct Shake: GeometryEffect {
 struct DetailsView: View {
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @Binding var show: Bool
+    @Binding var showInformationView: Bool
     @State var activeView = CGSize.zero
     @Binding var attempts: Int
     @GestureState var isLongPressed = false
     @State var pressed = false
     @State var startPos : CGPoint = .zero
-    
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @Binding var tabViewHidden: Bool
     
     var body: some View {
         VStack {
@@ -356,7 +377,34 @@ struct DetailsView: View {
                     
                     Spacer()
                     
-                    Button(action: {}) {
+                    Button(action: {
+                        
+                        let newFoodItem = FoodItem(context: self.managedObjectContext)
+                        
+                        newFoodItem.name = MLData.foodName.capitalizingFirstLetter().replacingOccurrences(of: "_", with: " ")
+                        newFoodItem.calories = NSNumber(value: Int(nutritionVM.calories))
+                        newFoodItem.carbs = NSNumber(value: Int(nutritionVM.carbs))
+                        newFoodItem.fats =  NSNumber(value: Int(nutritionVM.fat))
+                        newFoodItem.proteins =  NSNumber(value: Int(nutritionVM.protein))
+                        newFoodItem.servingSize = nutritionVM.servingSize
+                        newFoodItem.date = Date()
+                        
+                        do {
+                            try self.managedObjectContext.save()
+                        } catch {
+                            print(error)
+                        }
+                        
+                        haptic(type: .success)
+                        
+                        tabViewHidden = false
+                        
+                        showInformationView = false
+                        show = false
+                        
+                        nutritionVM.calories = 0
+                        
+                    }) {
                         Text("Save")
                             .padding()
                             .frame(maxWidth: screen.width - 60)
@@ -413,6 +461,7 @@ struct DetailsView: View {
                                 
                                 Text(show ? "\(MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())" : "\(Int(nutritionVM.calories))")
                                     .font(.system(size: show ? 55 : 60, weight: .bold))
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .minimumScaleFactor(0.2)
                                     .padding(show ? 5 : 0)
                                     .foregroundColor(show ? .white : .black)
@@ -505,8 +554,4 @@ struct DetailsView: View {
     }
 }
 
-struct DetailsView_Preview: PreviewProvider {
-    static var previews: some View {
-        DetailsView(show: .constant(true), attempts: .constant(0)).environmentObject(nutritionVM)
-    }
-}
+
