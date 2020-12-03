@@ -29,4 +29,23 @@ extension FoodItem {
         
         return request
     }
+    
+    static func getTodayFoodItems() -> NSFetchRequest<FoodItem> {
+        var calendar = Calendar.current
+        calendar.timeZone = NSTimeZone.local
+        let dateFrom = calendar.startOfDay(for: Date()) // eg. 2016-10-10 00:00:00
+        let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
+        
+        let request: NSFetchRequest<FoodItem> = FoodItem.fetchRequest()
+        as! NSFetchRequest<FoodItem>
+        
+        let fromPredicate = NSPredicate(format: "date >= %@", dateFrom as NSDate)
+        let toPredicate = NSPredicate(format: "date < %@",  dateTo! as NSDate)
+        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+        request.predicate = datePredicate
+        
+        request.sortDescriptors = []
+        
+        return request
+    }
 }

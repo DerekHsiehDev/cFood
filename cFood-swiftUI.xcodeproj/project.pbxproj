@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		4B39876825774F6600999A60 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B39876725774F6600999A60 /* GridView.swift */; };
 		4B7ABFDC2572E126001CDC20 /* FatSecretSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7ABFDB2572E126001CDC20 /* FatSecretSwift.swift */; };
 		4B9F3D6B2570E1E6003C167F /* FoodDataRequest .swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F3D6A2570E1E6003C167F /* FoodDataRequest .swift */; };
+		652A8D992578B45B0078700C /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 652A8D982578B45B0078700C /* SwiftUICharts */; };
 		6542DB572576D915001089E2 /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6542DB562576D915001089E2 /* FoodItem.swift */; };
 		6572AC8925760E0300A6B33A /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572AC8825760E0300A6B33A /* LogView.swift */; };
 		6572ACBA2576167F00A6B33A /* FoodNutrition.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6572ACB82576167F00A6B33A /* FoodNutrition.xcdatamodeld */; };
@@ -56,6 +57,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				048F60C4BA26D27345BC322D /* Pods_cFood_swiftUI.framework in Frameworks */,
+				652A8D992578B45B0078700C /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +149,9 @@
 			dependencies = (
 			);
 			name = "cFood-swiftUI";
+			packageProductDependencies = (
+				652A8D982578B45B0078700C /* SwiftUICharts */,
+			);
 			productName = "cFood-swiftUI";
 			productReference = 659C33452570478300430127 /* cFood-swiftUI.app */;
 			productType = "com.apple.product-type.application";
@@ -174,6 +179,9 @@
 				Base,
 			);
 			mainGroup = 659C333C2570478300430127;
+			packageReferences = (
+				652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */,
+			);
 			productRefGroup = 659C33462570478300430127 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -455,6 +463,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		652A8D982578B45B0078700C /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		6572ACB82576167F00A6B33A /* FoodNutrition.xcdatamodeld */ = {
