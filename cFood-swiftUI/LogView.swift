@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUICharts
+import SwiftUIPullToRefresh
 
 let colors = [
     Color(#colorLiteral(red: 0.999996841, green: 0.5568950772, blue: 0.556807816, alpha: 1)),
@@ -22,22 +23,56 @@ let colors = [
     Color(#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1))
 ]
 
+
+
 struct LogView: View {
     
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(fetchRequest: FoodItem.getAllFoodItems()) var foodItems: FetchedResults<FoodItem>
     @FetchRequest(fetchRequest: FoodItem.getTodayFoodItems()) var todayItems: FetchedResults<FoodItem>
+//    @FetchRequest(fetchRequest: FoodItem.getLastWeekFoodItems()) var lastWeekItems: FetchedResults<FoodItem>
+    @FetchRequest(fetchRequest: FoodItem.getitemsFlipped()) var foodItemsFlipped: FetchedResults<FoodItem>
     
     let date = Date()
     let dateFormatter = DateFormatter()
     let calendar = Calendar.current
-    let chartStyle = ChartStyle(backgroundColor: Color(#colorLiteral(red: 0.225826323, green: 0.8422113061, blue: 0.4377509356, alpha: 1)), accentColor: Color(.black).opacity(0.3), secondGradientColor: Color(.white), textColor: Color.white, legendTextColor: Color.white, dropShadowColor: Color(#colorLiteral(red: 0.225826323, green: 0.8422113061, blue: 0.4377509356, alpha: 1)) )
+    let chartStyle = ChartStyle(backgroundColor: Color.white, accentColor: Color.black, secondGradientColor: Color.black.opacity(0.8), textColor: Color.black, legendTextColor: Color.black.opacity(0.7), dropShadowColor: Color.gray)
+    @State var data = [Double]()
     
     @State var dayOfWeek = 1
     @State var dateNumber = ""
     @State var tappedDate = false
     @State var todayCalories = 0
+//    @State var weeklyCalories = Array(repeating: 0, count: 7)
     
+    
+    fileprivate func refreshData() {
+        dateFormatter.dateFormat = "EEEE"
+        dateNumber = dateFormatter.string(from: date)
+        let components = calendar.dateComponents([.day], from: date)
+        dayOfWeek = components.day!
+       
+        
+        for item in self.todayItems {
+            todayCalories += item.calories as! Int
+            
+        }
+        //            weeklyCalories[6] = todayCalories
+        //
+        //            var index = -1
+        //
+        //            for item in self.lastWeekItems {
+        //
+        //                index = compareDate(date: item.date!)
+        //
+        //                weeklyCalories[index] += item.calories as! Int
+        //
+        //            }
+        
+        for item in self.foodItemsFlipped {
+            data.append(item.calories as? Double ?? 0)
+        }
+    }
     
     var body: some View {
         VStack {
@@ -58,8 +93,9 @@ struct LogView: View {
                 }
             }
             
-            BarChartView(data: ChartData(points: [8,23,54,32,12,37,7,23,43]), title: "Weekly Summary", style: chartStyle, form: ChartForm.large, dropShadow: true, cornerImage:Image(systemName: "flame"), valueSpecifier: "%.0f")
-                .frame(width: 400, height: 200)
+//            BarChartView(data: ChartData(points: foodItemsArray), title: "Weekly Summary", style: chartStyle, form: ChartForm.large, dropShadow: true, cornerImage:Image(systemName: "flame"), valueSpecifier: "%.0f")
+            LineChartView(data: data.self, title: "Calorie Summary", legend: "kcal", style: chartStyle, form: ChartForm.large, rateValue: nil)
+    
             
             Spacer()
             
@@ -106,7 +142,7 @@ struct LogView: View {
                                 .padding(10)
                                 .background(
                                     RoundedRectangle(cornerRadius: 15)
-                                        .fill(tappedDate ? Color(#colorLiteral(red: 0.3647058824, green: 0.8784734011, blue: 0.3960191309, alpha: 1)) : Color(#colorLiteral(red: 0.4567164351, green: 0.7213024712, blue: 0.8116621375, alpha: 1)))
+                                        .fill(tappedDate ? Color(#colorLiteral(red: 0.3647058824, green: 0.8784734011, blue: 0.3960191309, alpha: 1)) : Color(#colorLiteral(red: 0.3969526291, green: 0.7017644048, blue: 0.2041607201, alpha: 1)))
                                 )
                                 
                                 
@@ -155,20 +191,13 @@ struct LogView: View {
                 }
             }
         }.onAppear {
-            dateFormatter.dateFormat = "EEEE"
-            dateNumber = dateFormatter.string(from: date)
-            let components = calendar.dateComponents([.weekday], from: date)
-            dayOfWeek = components.weekday!
-            
-            for item in self.todayItems {
-                todayCalories += item.calories as! Int
-                
-            }
+            refreshData()
           
       
         }
         .onDisappear {
             todayCalories = 0
+            data.removeAll()
         }
         
         
@@ -176,8 +205,34 @@ struct LogView: View {
     }
 }
 
-struct LogView_Previews: PreviewProvider {
-    static var previews: some View {
-        LogView()
-    }
-}
+
+//TODO: track week
+//func compareDate(date: Date) -> Int {
+//
+//    var calender = Calendar.current
+//    calender.timeZone = TimeZone.current
+//    let currentDate = Date()
+//
+//    let result5 = calender.compare(date, to: calender.date(byAdding: .day, value: -1 ,to: currentDate)!, toGranularity: .day)
+//    let result4 = calender.compare(date, to: calender.date(byAdding: .day, value: -2 ,to: currentDate)!, toGranularity: .day)
+//    let result3 = calender.compare(date, to: calender.date(byAdding: .day, value: -3 ,to: currentDate)!, toGranularity: .day)
+//    let result2 = calender.compare(date, to: calender.date(byAdding: .day, value: -4 ,to: currentDate)!, toGranularity: .day)
+//    let result1 = calender.compare(date, to: calender.date(byAdding: .day, value: -5 ,to: currentDate)!, toGranularity: .day)
+//    let result0 = calender.compare(date, to: calender.date(byAdding: .day, value: -6 ,to: currentDate)!, toGranularity: .day)
+//
+//    if (result5 == .orderedSame) == true {
+//        return 5
+//    } else if (result4 == .orderedSame) == true {
+//        return 4
+//    } else if (result3 == .orderedSame) == true {
+//        return 3
+//    } else if (result2 == .orderedSame) == true {
+//        return 2
+//    } else if (result1 == .orderedSame) == true {
+//        return 1
+//    } else if (result0 == .orderedSame) == true {
+//        return 0
+//    }
+//
+//    else { return -1 }
+//}

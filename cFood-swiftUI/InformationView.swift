@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CoreData
-
+import SPAlert
 
 
 let screen = UIScreen.main.bounds
@@ -130,6 +130,8 @@ struct ToolBarView: View {
                     
                     show = false
                     nutritionVM.calories = 0
+                    
+                    SPAlert.present(title: "Added to Log", preset: .done)
                     
                 }) {
                     Image(systemName: "folder.badge.plus")
@@ -409,6 +411,8 @@ struct DetailsView: View {
                         show = false
                         
                         nutritionVM.calories = 0
+                        
+                        SPAlert.present(title: "Added to Log", preset: .done)
                         
                     }) {
                         Text("Save")

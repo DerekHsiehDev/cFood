@@ -48,4 +48,37 @@ extension FoodItem {
         
         return request
     }
+    
+    static func getitemsFlipped() -> NSFetchRequest<FoodItem> {
+        let request: NSFetchRequest<FoodItem> = FoodItem.fetchRequest() as! NSFetchRequest<FoodItem>
+        
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        
+        request.sortDescriptors = [sortDescriptor]
+        
+        return request
+
+    }
+    
+    //TODO: Track week is in progress
+    
+//    static func getLastWeekFoodItems() -> NSFetchRequest<FoodItem> {
+//
+//        var calendar = Calendar.current
+//        calendar.timeZone = NSTimeZone.local
+//        let lastWeekDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: Date())!
+//        let dateTo = Date()
+//
+//        let request: NSFetchRequest<FoodItem> = FoodItem.fetchRequest()
+//        as! NSFetchRequest<FoodItem>
+//
+//        let fromPredicate = NSPredicate(format: "date >= %@", lastWeekDate as NSDate)
+//        let toPredicate = NSPredicate(format: "date < %@",  dateTo as NSDate)
+//        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+//        request.predicate = datePredicate
+//
+//        request.sortDescriptors = []
+//
+//        return request
+//    }
 }

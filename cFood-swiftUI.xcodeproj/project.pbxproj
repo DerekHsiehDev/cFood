@@ -13,6 +13,7 @@
 		4B9F3D6B2570E1E6003C167F /* FoodDataRequest .swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9F3D6A2570E1E6003C167F /* FoodDataRequest .swift */; };
 		652A8D992578B45B0078700C /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 652A8D982578B45B0078700C /* SwiftUICharts */; };
 		6542DB572576D915001089E2 /* FoodItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6542DB562576D915001089E2 /* FoodItem.swift */; };
+		65535F15257B6A7000E055BC /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 65535F14257B6A7000E055BC /* SwiftUIPullToRefresh */; };
 		6572AC8925760E0300A6B33A /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572AC8825760E0300A6B33A /* LogView.swift */; };
 		6572ACBA2576167F00A6B33A /* FoodNutrition.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6572ACB82576167F00A6B33A /* FoodNutrition.xcdatamodeld */; };
 		659C33492570478300430127 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659C33482570478300430127 /* AppDelegate.swift */; };
@@ -58,6 +59,7 @@
 			files = (
 				048F60C4BA26D27345BC322D /* Pods_cFood_swiftUI.framework in Frameworks */,
 				652A8D992578B45B0078700C /* SwiftUICharts in Frameworks */,
+				65535F15257B6A7000E055BC /* SwiftUIPullToRefresh in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +153,7 @@
 			name = "cFood-swiftUI";
 			packageProductDependencies = (
 				652A8D982578B45B0078700C /* SwiftUICharts */,
+				65535F14257B6A7000E055BC /* SwiftUIPullToRefresh */,
 			);
 			productName = "cFood-swiftUI";
 			productReference = 659C33452570478300430127 /* cFood-swiftUI.app */;
@@ -181,6 +184,7 @@
 			mainGroup = 659C333C2570478300430127;
 			packageReferences = (
 				652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */,
+				65535F13257B6A7000E055BC /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */,
 			);
 			productRefGroup = 659C33462570478300430127 /* Products */;
 			projectDirPath = "";
@@ -473,6 +477,14 @@
 				minimumVersion = 1.5.4;
 			};
 		};
+		65535F13257B6A7000E055BC /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/SwiftUI-PullToRefresh";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -480,6 +492,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */;
 			productName = SwiftUICharts;
+		};
+		65535F14257B6A7000E055BC /* SwiftUIPullToRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65535F13257B6A7000E055BC /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */;
+			productName = SwiftUIPullToRefresh;
 		};
 /* End XCSwiftPackageProductDependency section */
 

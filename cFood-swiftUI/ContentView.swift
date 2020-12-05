@@ -87,8 +87,11 @@ struct ContentView: View {
             }
             .tabItem {
                 VStack {
-                    Text("")
+                    
                     Image(systemName: "house.fill")
+                        .padding(.top, 40)
+                        .padding(30)
+                    Text("Home")
                         .padding(30)
                 }
                 
@@ -188,7 +191,10 @@ struct ContentView: View {
             
             LogView().tabItem {
                 Image(systemName: "tray.fill")
+                    .padding(.top, 40)
                 .padding(30)
+                Text("Food Log")
+                    .padding(30)
             }.tag(0)
             
             

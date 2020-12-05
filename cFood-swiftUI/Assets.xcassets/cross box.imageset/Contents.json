@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "cross box.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "cross box.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -6,6 +6,7 @@ target 'cFood-swiftUI' do
   use_frameworks!
 pod 'CryptoSwift'
 pod "Introspect"
+pod 'SPAlert'
 
   # Pods for cFood-swiftUI
 
