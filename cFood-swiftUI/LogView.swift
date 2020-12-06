@@ -177,7 +177,10 @@ struct LogView: View {
                     
                 }.onDelete { (indexSet) in
                     let deleteItem = self.foodItems[indexSet.first!]
-                    todayCalories -= self.foodItems[indexSet.first!].calories as! Int
+                    
+                    if todayCalories - Int(truncating: self.foodItems[indexSet.first!].calories ?? 0) >= 0  {
+                        todayCalories -= self.foodItems[indexSet.first!].calories as! Int
+                    }
                     self.managedObjectContext.delete(deleteItem)
                     
                     do {
