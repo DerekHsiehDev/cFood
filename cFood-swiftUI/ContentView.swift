@@ -48,8 +48,9 @@ struct FatSecret {
 struct ContentView: View {
     
     init() {
-        UITabBar.appearance().backgroundColor = UIColor.green
+        UITabBar.appearance().barTintColor = UIColor(red: 0.23, green: 0.84, blue: 0.44, alpha: 1.0)
         UITabBar.appearance().tintColor = UIColor.white
+      
         }
     
     @EnvironmentObject var nutritionVM: NutritionViewModel

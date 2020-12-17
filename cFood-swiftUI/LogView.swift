@@ -94,8 +94,8 @@ struct LogView: View {
             }
             
 //            BarChartView(data: ChartData(points: foodItemsArray), title: "Weekly Summary", style: chartStyle, form: ChartForm.large, dropShadow: true, cornerImage:Image(systemName: "flame"), valueSpecifier: "%.0f")
-            LineChartView(data: data.self, title: "Calorie Summary", legend: "kcal", style: chartStyle, form: ChartForm.large, rateValue: nil)
-    
+//            LineChartView(data: data.self, title: "Calorie Summary", legend: "kcal", style: chartStyle, form: ChartForm.large, rateValue: nil)
+//
             
             Spacer()
             
@@ -142,7 +142,7 @@ struct LogView: View {
                                 .padding(10)
                                 .background(
                                     RoundedRectangle(cornerRadius: 15)
-                                        .fill(tappedDate ? Color(#colorLiteral(red: 0.3647058824, green: 0.8784734011, blue: 0.3960191309, alpha: 1)) : Color(#colorLiteral(red: 0.3969526291, green: 0.7017644048, blue: 0.2041607201, alpha: 1)))
+                                        .fill(tappedDate ? Color(#colorLiteral(red: 0.3969526291, green: 0.7017644048, blue: 0.2041607201, alpha: 1)) : Color(#colorLiteral(red: 0.3647058824, green: 0.8784734011, blue: 0.3960191309, alpha: 1)))
                                 )
                                 
                                 

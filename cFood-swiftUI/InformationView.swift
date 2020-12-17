@@ -95,8 +95,8 @@ struct ToolBarView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(#colorLiteral(red: 0.225826323, green: 0.8422113061, blue: 0.4377509356, alpha: 1)))
-                .frame(width: UIScreen.main.bounds.width, height: 150)
+                .fill(Color(#colorLiteral(red: 0.2274509804, green: 0.8431372549, blue: 0.4392156863, alpha: 1)))
+                .frame(width: UIScreen.main.bounds.width, height: 100)
             
             
             
@@ -158,7 +158,7 @@ struct CalorieView: View {
     var body: some View {
         
         ZStack(alignment: .center) {
-            HStack {
+            HStack(alignment: .center) {
                 
                 if show == false {
                     Button(action: {
@@ -178,15 +178,13 @@ struct CalorieView: View {
                         
                     }) {
                         
-                        Circle()
-                            .fill(Color(#colorLiteral(red: 0.9607843137, green: 0.2862745098, blue: 0.2862745098, alpha: 1)))
-                            .frame(width: 73, height: 73)
-                            .shadow(color: Color.black.opacity(0.5), radius: 6, x: 1, y: 10)
-                            .overlay(
                                 Text("-")
-                                    .font(.system(size: 55, weight: .regular, design: .rounded))
-                                    .foregroundColor(.white)
-                            )
+                                    .font(.system(size: 140, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color(#colorLiteral(red: 0.9607843137, green: 0.2862745098, blue: 0.2862745098, alpha: 1)))
+                                    .padding(.leading)
+                                    .padding(.trailing)
+                                    .shadow(color: Color.black.opacity(0.5), radius: 6, x: 1, y: 10)
+                            
                         
                         
                     }.padding()
@@ -202,16 +200,16 @@ struct CalorieView: View {
                         
                     }) {
                         
-                        Circle()
-                            .fill(Color(#colorLiteral(red: 0.5097282529, green: 0.6118130088, blue: 0.9998771548, alpha: 1)))
-                            .frame(width: 73, height: 73)
-                            .shadow(color: Color.black.opacity(0.5), radius: 6, x: 1, y: 10)
-                            .overlay(  Text("+")
-                                        .font(.system(size: 55, weight: .regular, design: .rounded))
-                                        .foregroundColor(.white)
-                            )
+                  
+                                Text("+")
+                                        .font(.system(size: 100, weight: .bold, design: .rounded))
+                                        .foregroundColor(Color(#colorLiteral(red: 0.5097282529, green: 0.6118130088, blue: 0.9998771548, alpha: 1)))
+                                    .padding(.trailing)
+                                    .padding(.leading)
+                                    .shadow(color: Color.black.opacity(0.5), radius: 6, x: 1, y: 10)
+                            
                         
-                    }.padding()
+                    }
                 }
             }
             
