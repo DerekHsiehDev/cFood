@@ -201,7 +201,7 @@ struct ContentView: View {
             
             
         }
-        .accentColor(.orange)
+        .accentColor(.white)
         .introspectTabBarController { (UITabBarController) in
             UITabBarController.tabBar.isHidden = tabBarHidden
            
