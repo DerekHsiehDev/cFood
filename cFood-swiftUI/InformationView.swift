@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import SPAlert
+import ActivityIndicatorView
 
 
 let screen = UIScreen.main.bounds
@@ -27,37 +28,201 @@ struct InformationView: View {
     @EnvironmentObject var nutritionVM: NutritionViewModel
     @State var showDetailsView = false
     @Binding var tabViewHidden: Bool
+   @State var alert = false
+    @State var searchText = ""
+    @State var HUD = false
     
-   
-    
-    
+    let fatSearchRequest = FatSecretAPI()
     
     var body: some View {
-        VStack {
+    
+        ZStack {
+            VStack {
+                    
+           
+                    
+                    
+                    
+                    if showDetailsView == false {
+                        
+                        ToolBarView(tabViewHidden: $tabViewHidden, show: $show)
+                        
+                        Text("\(MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())")
+                            .font(.system(size: 45, weight: .heavy))
+                            .foregroundColor(Color.white)
+                            .shadow(color: Color.black.opacity(0.8), radius: 5, x: 3, y: 3)
+                            .padding()
+                            .onTapGesture {
+                                alertView(currentFood: MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())
+                            }
+                        
+                    }
+                    
+                    
+                    Spacer()
+                    
+                    CalorieView(show: $showDetailsView, tabViewHidden: $tabViewHidden, showInformationView: $show)
+                }
+                .edgesIgnoringSafeArea(.all)
+                .opacity(show ? 1 : 0)
+            .animation(.easeInOut)
             
+          
             
+              
+                    ActivityIndicatorView(isVisible: $HUD, type: .flickeringDots)
+                         .frame(width: 150, height: 150)
+                         .foregroundColor(.green)
+                        .padding(30)
+                        .background(
+                            Circle()
+                                .fill(Color.black.opacity(0.5))
+                                
+                            
+                        )
             
-            if showDetailsView == false {
                 
-                ToolBarView(tabViewHidden: $tabViewHidden, show: $show)
                 
-                Text("\(MLData.foodName.replacingOccurrences(of: "_", with: " ").capitalizingFirstLetter())")
-                    .font(.system(size: 45, weight: .heavy))
-                    .foregroundColor(Color.white)
-                    .shadow(color: Color.black.opacity(0.8), radius: 5, x: 3, y: 3)
-                    .padding()
-                
-            }
             
             
-            Spacer()
-            
-            CalorieView(show: $showDetailsView, tabViewHidden: $tabViewHidden, showInformationView: $show)
         }
-        .edgesIgnoringSafeArea(.all)
-        .opacity(show ? 1 : 0)
-        .animation(.easeInOut)
+            
+            
+            
+        }
+       
+       
+    
+    
+    func alertView(currentFood: String) {
+        let alert = UIAlertController(title: "Search", message: "Enter Food To Search", preferredStyle: .alert)
+        
+        alert.addTextField { (text) in
+            text.placeholder = currentFood
+        }
+        
+        let search = UIAlertAction(title: "Search", style: .default) { (_) in
+            
+            HUD = true
+            
+            
+            MLData.foodName = alert.textFields![0].text!
+            
+            let randomAcc = Int.random(in: 0..<3)
+            
+            fatSearchRequest.key = FatSecret().returnKey(acc: randomAcc)
+            fatSearchRequest.secret = FatSecret().returnSecret(acc: randomAcc)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                
+                fatSearchRequest.searchFoodBy(name: MLData.foodName.replacingOccurrences(of: "_", with: " ")) { (search) in
+                    print(MLData.foodName)
+                    var str = search.foods.first!.description!
+                    print(str)
+                    
+                    var servingSize = ""
+                    
+                    if let endIndex = str.range(of: "-")?.lowerBound {
+                        servingSize = (String(str[..<endIndex]))
+                    }
+                    
+                    //                            print(servingSize)
+                    
+                    
+                    
+                    if let range = str.range(of: "-") {
+                        str = String(str[range.upperBound...])
+                        
+                    }
+                    
+                    let nutritionArray = str.components(separatedBy: "|")
+                    print(nutritionArray)
+                    
+                    let calories = nutritionArray.first
+                    let fat = nutritionArray[1]
+                    let carbs = nutritionArray[2]
+                    let protein = nutritionArray[3]
+                    
+                    // get serving size
+                    
+                    
+                    DispatchQueue.main.async {
+                        nutritionVM.calories = filterOutNums(str: calories!)
+                        nutritionVM.fat = (filterOutNums(str: fat))
+                        nutritionVM.carbs = (filterOutNums(str: carbs))
+                        nutritionVM.protein = (filterOutNums(str: protein))
+                        nutritionVM.servingSize = servingSize
+                        self.HUD = false
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .destructive) { (_) in
+            
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(search)
+        
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: {
+            
+        })
     }
+}
+
+struct HUDProgressView: View {
+    var placeHolder: String
+    @Binding var show: Bool
+    @State var animate = false
+    
+    var body: some View {
+        VStack(spacing: 28) {
+            Circle()
+                .stroke(AngularGradient(gradient: .init(colors: [Color.primary, Color.primary.opacity(0)]), center: .center))
+                .frame(width: 80, height: 80)
+                .rotationEffect(.init(degrees: animate ? 360 : 0))
+            
+            Text(placeHolder)
+                .fontWeight(.bold)
+                .background(BlurView())
+                .cornerRadius(20)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.primary.opacity(0.35)
+                                .onTapGesture {
+                                    withAnimation {
+                                        show.toggle()
+                                    }
+                                }
+                
+                )
+                .onAppear {
+                    withAnimation(Animation.linear(duration: 1.5).repeatForever(autoreverses: false)) {
+                        animate.toggle()
+                    }
+                }
+        }
+        .padding(.vertical, 25)
+        .padding(.horizontal, 35)
+    }
+    
+}
+
+struct BlurView: UIViewRepresentable {
+    
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+        
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        
+    }
+    
+    
 }
 
 //struct InformationView_Previews: PreviewProvider {
@@ -283,10 +448,10 @@ struct DetailsView: View {
                             }.padding()
                         }
                         .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
-                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
+//                        )
                         Spacer()
                         HStack {
                             Image("wheat")
@@ -305,10 +470,10 @@ struct DetailsView: View {
                             }.padding()
                         }
                         .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
-                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
+//                        )
                     }.padding(.bottom, 40)
                     .padding(.top, 250)
                     
@@ -332,10 +497,10 @@ struct DetailsView: View {
                         }.padding(.trailing, 25)
                         .padding(10)
                         
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
-                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
+//                        )
                         
                         Spacer()
                         
@@ -356,10 +521,10 @@ struct DetailsView: View {
                         }
                         .padding(10)
                         
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
-                        )
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .stroke(Color(.black).opacity(0.1), lineWidth: 5)
+//                        )
                         
                         
                         

@@ -26,6 +26,7 @@
 		659C33652570690A00430127 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 659C33642570690A00430127 /* Main.storyboard */; };
 		659C336F257069A000430127 /* cFoodML.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 659C336E257069A000430127 /* cFoodML.mlmodel */; };
 		65EAEA422571F52B00C0D4E3 /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EAEA412571F52B00C0D4E3 /* InformationView.swift */; };
+		65F8A188259FE32F00CF803C /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 65F8A187259FE32F00CF803C /* ActivityIndicatorView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 			files = (
 				048F60C4BA26D27345BC322D /* Pods_cFood_swiftUI.framework in Frameworks */,
 				652A8D992578B45B0078700C /* SwiftUICharts in Frameworks */,
+				65F8A188259FE32F00CF803C /* ActivityIndicatorView in Frameworks */,
 				65535F15257B6A7000E055BC /* SwiftUIPullToRefresh in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -154,6 +156,7 @@
 			packageProductDependencies = (
 				652A8D982578B45B0078700C /* SwiftUICharts */,
 				65535F14257B6A7000E055BC /* SwiftUIPullToRefresh */,
+				65F8A187259FE32F00CF803C /* ActivityIndicatorView */,
 			);
 			productName = "cFood-swiftUI";
 			productReference = 659C33452570478300430127 /* cFood-swiftUI.app */;
@@ -185,6 +188,7 @@
 			packageReferences = (
 				652A8D972578B45B0078700C /* XCRemoteSwiftPackageReference "ChartView" */,
 				65535F13257B6A7000E055BC /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */,
+				65F8A186259FE32F00CF803C /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 			);
 			productRefGroup = 659C33462570478300430127 /* Products */;
 			projectDirPath = "";
@@ -489,6 +493,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		65F8A186259FE32F00CF803C /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -501,6 +513,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65535F13257B6A7000E055BC /* XCRemoteSwiftPackageReference "SwiftUI-PullToRefresh" */;
 			productName = SwiftUIPullToRefresh;
+		};
+		65F8A187259FE32F00CF803C /* ActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65F8A186259FE32F00CF803C /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
+			productName = ActivityIndicatorView;
 		};
 /* End XCSwiftPackageProductDependency section */
 

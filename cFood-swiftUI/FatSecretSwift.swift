@@ -54,7 +54,7 @@ public class FatSecretAPI {
         fatSecretRequestWith(components: components) { (data) in
             if let data = data {
                 let model = self.retrieve(data: data, type: [String:Search].self)
-                let search = model!["foods"]
+                let search = model?["foods"]
                 completion((search)!)
             }
         }
@@ -69,7 +69,7 @@ public class FatSecretAPI {
         fatSecretRequestWith(components: components) { (data) in
             if let data = data {
                 let model = self.retrieve(data: data, type: [String:Food].self)
-                let food = model!["food"]
+                let food = model?["food"]
                 completion(food!)
             }
         }

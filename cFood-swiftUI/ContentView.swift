@@ -63,6 +63,58 @@ struct ContentView: View {
     
     let fatSearchRequest = FatSecretAPI()
     
+    fileprivate func fetchInfo() {
+        let randomAcc = Int.random(in: 0..<3)
+        
+        fatSearchRequest.key = FatSecret().returnKey(acc: randomAcc)
+        fatSearchRequest.secret = FatSecret().returnSecret(acc: randomAcc)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            
+            fatSearchRequest.searchFoodBy(name: MLData.foodName.replacingOccurrences(of: "_", with: " ")) { (search) in
+                print(MLData.foodName)
+                var str = search.foods.first!.description!
+                print(str)
+                
+                var servingSize = ""
+                
+                if let endIndex = str.range(of: "-")?.lowerBound {
+                    servingSize = (String(str[..<endIndex]))
+                }
+                
+                //                            print(servingSize)
+                
+                
+                
+                if let range = str.range(of: "-") {
+                    str = String(str[range.upperBound...])
+                    
+                }
+                
+                let nutritionArray = str.components(separatedBy: "|")
+                print(nutritionArray)
+                
+                let calories = nutritionArray.first
+                let fat = nutritionArray[1]
+                let carbs = nutritionArray[2]
+                let protein = nutritionArray[3]
+                
+                // get serving size
+                
+                
+                DispatchQueue.main.async {
+                    nutritionVM.calories = filterOutNums(str: calories!)
+                    nutritionVM.fat = (filterOutNums(str: fat))
+                    nutritionVM.carbs = (filterOutNums(str: carbs))
+                    nutritionVM.protein = (filterOutNums(str: protein))
+                    nutritionVM.servingSize = servingSize
+                }
+                
+                
+            }
+        }
+    }
+    
     var body: some View {
         
         
@@ -121,55 +173,7 @@ struct ContentView: View {
                         tabBarHidden = true
                         
                         show = true
-                        let randomAcc = Int.random(in: 0..<3)
-                        
-                        fatSearchRequest.key = FatSecret().returnKey(acc: randomAcc)
-                        fatSearchRequest.secret = FatSecret().returnSecret(acc: randomAcc)
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            
-                            fatSearchRequest.searchFoodBy(name: MLData.foodName.replacingOccurrences(of: "_", with: " ")) { (search) in
-                                print(MLData.foodName)
-                                var str = search.foods.first!.description!
-                                print(str)
-                                
-                                var servingSize = ""
-                                
-                                if let endIndex = str.range(of: "-")?.lowerBound {
-                                    servingSize = (String(str[..<endIndex]))
-                                }
-                                
-                                //                            print(servingSize)
-                                
-                                
-                                
-                                if let range = str.range(of: "-") {
-                                    str = String(str[range.upperBound...])
-                                    
-                                }
-                                
-                                let nutritionArray = str.components(separatedBy: "|")
-                                print(nutritionArray)
-                                
-                                let calories = nutritionArray.first
-                                let fat = nutritionArray[1]
-                                let carbs = nutritionArray[2]
-                                let protein = nutritionArray[3]
-                                
-                                // get serving size
-                                
-                                
-                                DispatchQueue.main.async {
-                                    nutritionVM.calories = filterOutNums(str: calories!)
-                                    nutritionVM.fat = (filterOutNums(str: fat))
-                                    nutritionVM.carbs = (filterOutNums(str: carbs))
-                                    nutritionVM.protein = (filterOutNums(str: protein))
-                                    nutritionVM.servingSize = servingSize
-                                }
-                                
-                                
-                            }
-                        }
+                        fetchInfo()
                         
                     }
                     
